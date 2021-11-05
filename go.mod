@@ -2,6 +2,16 @@ module github.com/nais/dataproduct-topics
 
 go 1.17
 
-require github.com/sirupsen/logrus v1.8.1
+require (
+	github.com/prometheus/client_golang v1.11.0
+	github.com/prometheus/common v0.26.0
+	github.com/sirupsen/logrus v1.8.1
+)
 
-require golang.org/x/sys v0.0.0-20191026070338-33540a1f6037 // indirect
+require (
+	github.com/json-iterator/go v1.1.11 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/stretchr/testify v1.6.1 // indirect
+	golang.org/x/sys v0.0.0-20210603081109-ebe580a85c40 // indirect
+)
