@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"os"
+	"strings"
 
 	"github.com/nais/dataproduct-topics/pkg/collector"
 	log "github.com/sirupsen/logrus"
@@ -11,12 +12,11 @@ import (
 
 var (
 	onprem  = false
-	brokers = ""
 )
 
 func init() {
 	flag.BoolVar(&onprem, "onprem", true, "use onprem settings")
-	flag.StringVar(&brokers, "brokers", "", "brokers to query for topics")
+	flag.Parse()
 }
 
 func main() {
