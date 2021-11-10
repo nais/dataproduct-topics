@@ -6,7 +6,8 @@ FROM busybox
 LABEL org.opencontainers.image.source = "https://github.com/$EARTHLY_GIT_PROJECT_NAME"
 
 build:
-    FROM golang:${GO_VERSION}
+    FROM golang:${GO_VERSION}-alpine3.14
+    ENV CGO_ENABLED=0
 
     WORKDIR /app
 
@@ -24,7 +25,7 @@ tests:
     RUN go test ./...
 
 docker:
-    FROM scratch
+    FROM alpine:3.14
     ARG EARTHLY_GIT_SHORT_HASH
     ARG IMAGE_TAG=$EARTHLY_GIT_SHORT_HASH
 
