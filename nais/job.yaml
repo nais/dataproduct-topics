@@ -28,7 +28,6 @@ spec:
   vault:
     enabled: true
     paths:
-      - format: env
-        kvPath: "{{ kafka_serviceuser_vault_path }}"
+      - kvPath: "{{ kafka_serviceuser_vault_path }}"
         mountPath: /var/run/secrets/nais.io/kafka_serviceuser
   {{/if}}
