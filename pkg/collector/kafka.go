@@ -18,8 +18,8 @@ type Collector struct {
 
 func (c *Collector) ConfigureOnpremDialer() error {
 	mechanism := plain.Mechanism{
-		Username: os.Getenv("ONPREM_KAFKA_USERNAME"),
-		Password: os.Getenv("ONPREM_KAFKA_PASSWORD"),
+		Username: os.Getenv("KAFKA_USERNAME"),
+		Password: os.Getenv("KAFKA_PASSWORD"),
 	}
 
 	certPool, err := x509.SystemCertPool()
