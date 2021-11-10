@@ -31,8 +31,10 @@ docker:
 
     WORKDIR /app
 
-    COPY --dir +build/dataproduct-topics .
-    CMD ["/app/dataproduct-topics"]
+    COPY +build/dataproduct-topics .
+    COPY start.sh .
+
+    CMD ["/app/start.sh"]
 
     SAVE IMAGE --push ${IMAGE}:${IMAGE_TAG}
     SAVE IMAGE --push ${IMAGE}:latest
