@@ -5,7 +5,4 @@ if [ "$ONPREM" = "true" ]; then
     export KAFKA_USERNAME KAFKA_PASSWORD
 fi
 
-ls /var/run/secrets/gcp
-head -n1 /var/run/secrets/gcp/sa.json
-
 /app/dataproduct-topics

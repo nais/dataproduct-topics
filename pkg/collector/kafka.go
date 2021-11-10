@@ -6,11 +6,20 @@ import (
 	"crypto/x509"
 	"fmt"
 	"os"
+	"strings"
+	"time"
 
-	kafka "github.com/segmentio/kafka-go"
+	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
 	log "github.com/sirupsen/logrus"
 )
+
+type Topic struct {
+	CollectionTime time.Time `json:"collection_time"`
+	Topic          string    `json:"topic"`
+	Team           string    `json:"team"`
+	Cluster        string    `json:"cluster"`
+}
 
 type Collector struct {
 	dialer *kafka.Dialer
@@ -41,7 +50,7 @@ func (c *Collector) ConfigureOnpremDialer() error {
 func (c *Collector) ConfigureAivenDialer() error {
 	ca := os.Getenv("KAFKA_CA")
 	pool := x509.NewCertPool()
-	pool.AppendCertsFromPEM([]byte (ca))
+	pool.AppendCertsFromPEM([]byte(ca))
 
 	certFile := os.Getenv("KAFKA_CERTIFICATE_PATH")
 	keyFile := os.Getenv("KAFKA_PRIVATE_KEY_PATH")
@@ -53,7 +62,7 @@ func (c *Collector) ConfigureAivenDialer() error {
 
 	c.dialer = &kafka.Dialer{
 		TLS: &tls.Config{
-			RootCAs: pool,
+			RootCAs:      pool,
 			Certificates: []tls.Certificate{cert},
 		},
 	}
@@ -72,7 +81,7 @@ func (c *Collector) connect(ctx context.Context, brokers []string) (*kafka.Conn,
 	return nil, fmt.Errorf("failed connecting to any brokers")
 }
 
-func (c *Collector) GetTopics(ctx context.Context, brokers []string) ([]string, error) {
+func (c *Collector) GetTopics(ctx context.Context, brokers []string) ([]Topic, error) {
 	client, err := c.connect(ctx, brokers)
 	if err != nil {
 		return nil, err
@@ -88,12 +97,34 @@ func (c *Collector) GetTopics(ctx context.Context, brokers []string) ([]string, 
 		topicMap[partition.Topic] = struct{}{}
 	}
 
-	topicList := make([]string, len(topicMap))
+	cluster := os.Getenv("CLUSTER_NAME")
+
+	topicList := make([]Topic, len(topicMap))
 	i := 0
 	for key := range topicMap {
-		topicList[i] = key
+		topicList[i] = createTopicFromName(key, cluster)
 		i++
 	}
 
 	return topicList, nil
+}
+
+func createTopicFromName(topicName, cluster string) Topic {
+	parts := strings.SplitN(topicName, ".", 2)
+
+	if len(parts) == 2 {
+		return Topic{
+			CollectionTime: time.Now(),
+			Topic:          parts[1],
+			Team:           parts[0],
+			Cluster:        cluster,
+		}
+	}
+
+	return Topic{
+		CollectionTime: time.Now(),
+		Topic:          topicName,
+		Team:           "",
+		Cluster:        cluster,
+	}
 }

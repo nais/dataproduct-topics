@@ -53,4 +53,4 @@ jobs:
           CLUSTER: ${{ matrix.cluster }}
           RESOURCE: nais/job.yaml
           VARS: nais/vars-${{ matrix.cluster }}.yaml
-          VAR: image=${{ needs.build.outputs.image }},gcp_sa_json_base64=${{ secrets.GCP_SA_JSON_BASE64 }}
+          VAR: image=${{ needs.build.outputs.image }},gcp_sa_json_base64=${{ secrets.GCP_SA_JSON_BASE64 }},cluster_name=${{ matrix.cluster}}

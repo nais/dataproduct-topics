@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"strings"
 
 	"github.com/nais/dataproduct-topics/pkg/collector"
+	"github.com/nais/dataproduct-topics/pkg/persister"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -15,26 +17,29 @@ func main() {
 	topics, err := collect(programContext)
 	if err != nil {
 		log.Errorf("getting topics: %s", err)
+		os.Exit(1)
 	}
 
-	for _, topic := range topics {
-		log.Info(topic)
+	err = persister.Persist(programContext, topics)
+	if err != nil {
+		log.Errorf("persisting topics: %s", err)
+		os.Exit(1)
 	}
+
+	log.Info("Done!")
 }
 
-func collect(ctx context.Context) ([]string, error) {
+func collect(ctx context.Context) ([]collector.Topic, error) {
 	collect := &collector.Collector{}
 	if os.Getenv("ONPREM") == "true" {
 		err := collect.ConfigureOnpremDialer()
 		if err != nil {
-			log.Errorf("Setting up onprem collector: %s", err)
-			os.Exit(1)
+			return nil, fmt.Errorf("configure onprem collector: %s", err)
 		}
 	} else {
 		err := collect.ConfigureAivenDialer()
 		if err != nil {
-			log.Errorf("Setting up aiven collector: %s", err)
-			os.Exit(1)
+			return nil, fmt.Errorf("configure aiven collector: %s", err)
 		}
 	}
 
