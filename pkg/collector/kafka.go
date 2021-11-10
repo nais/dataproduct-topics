@@ -9,16 +9,17 @@ import (
 	"strings"
 	"time"
 
+	"cloud.google.com/go/civil"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
 	log "github.com/sirupsen/logrus"
 )
 
 type Topic struct {
-	CollectionTime time.Time `bigquery:"collection_time"`
-	Topic          string    `bigquery:"topic"`
-	Team           string    `bigquery:"team"`
-	Cluster        string    `bigquery:"cluster"`
+	CollectionTime civil.DateTime `bigquery:"collection_time"`
+	Topic          string         `bigquery:"topic"`
+	Team           string         `bigquery:"team"`
+	Cluster        string         `bigquery:"cluster"`
 }
 
 type Collector struct {
@@ -114,7 +115,7 @@ func createTopicFromName(topicName, cluster string) Topic {
 
 	if len(parts) == 2 {
 		return Topic{
-			CollectionTime: time.Now(),
+			CollectionTime: civil.DateTimeOf(time.Now()),
 			Topic:          parts[1],
 			Team:           parts[0],
 			Cluster:        cluster,
@@ -122,7 +123,7 @@ func createTopicFromName(topicName, cluster string) Topic {
 	}
 
 	return Topic{
-		CollectionTime: time.Now(),
+		CollectionTime: civil.DateTimeOf(time.Now()),
 		Topic:          topicName,
 		Team:           "",
 		Cluster:        cluster,
