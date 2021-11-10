@@ -15,10 +15,10 @@ import (
 )
 
 type Topic struct {
-	CollectionTime time.Time `json:"collection_time"`
-	Topic          string    `json:"topic"`
-	Team           string    `json:"team"`
-	Cluster        string    `json:"cluster"`
+	CollectionTime time.Time `bigquery:"collection_time"`
+	Topic          string    `bigquery:"topic"`
+	Team           string    `bigquery:"team"`
+	Cluster        string    `bigquery:"cluster"`
 }
 
 type Collector struct {
