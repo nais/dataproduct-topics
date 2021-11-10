@@ -24,6 +24,14 @@ tests:
     LOCALLY
     RUN go test ./...
 
+linkerd-await:
+    FROM docker.io/curlimages/curl:latest
+    ARG LINKERD_AWAIT_VERSION=v0.2.4
+    WORKDIR /tmp
+    RUN curl -sSLo /tmp/linkerd-await https://github.com/linkerd/linkerd-await/releases/download/release%2F${LINKERD_AWAIT_VERSION}/linkerd-await-${LINKERD_AWAIT_VERSION}-amd64 && \
+        chmod 755 /tmp/linkerd-await
+    SAVE ARTIFACT linkerd-await
+
 docker:
     FROM alpine:3.14
     ARG EARTHLY_GIT_SHORT_HASH
@@ -31,9 +39,11 @@ docker:
 
     WORKDIR /app
 
+    COPY +linkerd-await/linkerd-await .
     COPY +build/dataproduct-topics .
     COPY start.sh .
 
+    ENTRYPOINT [ "/app/linkerd-await", "--shutdown", "--" ]
     CMD ["/app/start.sh"]
 
     SAVE IMAGE --push ${IMAGE}:${IMAGE_TAG}

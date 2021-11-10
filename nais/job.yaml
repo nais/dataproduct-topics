@@ -20,6 +20,8 @@ spec:
       value: "true"
     - name: KAFKA_BROKERS
       value: "{{ kafka_brokers }}"
+    - name: LINKERD_AWAIT_DISABLED
+      value: "no linkerd onprem!"
   {{/if}}
 
   {{#if kafka_serviceuser_vault_path }}
