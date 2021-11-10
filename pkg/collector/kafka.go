@@ -39,6 +39,24 @@ func (c *Collector) ConfigureOnpremDialer() error {
 }
 
 func (c *Collector) ConfigureAivenDialer() error {
+	ca := os.Getenv("KAFKA_CA")
+	pool := x509.NewCertPool()
+	pool.AppendCertsFromPEM([]byte (ca))
+
+	certFile := os.Getenv("KAFKA_CERTIFICATE_PATH")
+	keyFile := os.Getenv("KAFKA_PRIVATE_KEY_PATH")
+
+	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
+	if err != nil {
+		return err
+	}
+
+	c.dialer = &kafka.Dialer{
+		TLS: &tls.Config{
+			RootCAs: pool,
+			Certificates: []tls.Certificate{cert},
+		},
+	}
 	return nil
 }
 
