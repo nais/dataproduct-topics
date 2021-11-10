@@ -8,14 +8,19 @@ metadata:
 spec:
   image: "{{ image }}"
   schedule: "13 4 * * *"
+  filesFrom:
+    - secret: dataproduct-topics
+      mountPath: /var/run/secrets/gcp/
 
   {{#if kafka_pool }}
   kafka:
     pool: "{{ kafka_pool }}"
   {{/if}}
 
-  {{#if kafka_brokers }}
   env:
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /var/run/secrets/gcp/sa.json
+  {{#if kafka_brokers }}
     - name: ONPREM
       value: "true"
     - name: KAFKA_BROKERS
@@ -31,3 +36,14 @@ spec:
       - kvPath: "{{ kafka_serviceuser_vault_path }}"
         mountPath: /var/run/secrets/nais.io/kafka_serviceuser
   {{/if}}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: dataproduct-topics
+  name: dataproduct-topics
+  namespace: aura
+type: Opaque
+data:
+  sa.json: {{ gcp_sa_json_base64 }}
