@@ -52,5 +52,5 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: ${{ matrix.cluster }}
           RESOURCE: nais/job.yaml
-          VARS: vars-${{ matrix.cluster }}.yaml
+          VARS: nais/vars-${{ matrix.cluster }}.yaml
           VAR: image=${{ needs.build.outputs.image }}
