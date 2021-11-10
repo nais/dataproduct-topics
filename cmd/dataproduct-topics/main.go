@@ -48,5 +48,7 @@ func collect(ctx context.Context) ([]string, error) {
 		}
 	}
 
-	return collect.GetTopics(ctx, []string{"b27apvl00045.preprod.local:8443"})
+	brokersEnv := os.Getenv("KAFKA_BROKERS")
+	brokers := strings.Split(brokersEnv, ",")
+	return collect.GetTopics(ctx, brokers)
 }
