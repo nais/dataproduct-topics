@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
-. /var/run/secrets/nais.io/kafka_serviceuser
+if [ "$ONPREM" = "true" ]; then
+    . /var/run/secrets/nais.io/kafka_serviceuser
+fi
 
 /app/dataproduct-topics

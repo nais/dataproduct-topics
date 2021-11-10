@@ -2,22 +2,12 @@ package main
 
 import (
 	"context"
-	"flag"
 	"os"
 	"strings"
 
 	"github.com/nais/dataproduct-topics/pkg/collector"
 	log "github.com/sirupsen/logrus"
 )
-
-var (
-	onprem  = false
-)
-
-func init() {
-	flag.BoolVar(&onprem, "onprem", true, "use onprem settings")
-	flag.Parse()
-}
 
 func main() {
 	programContext := context.Background()
@@ -34,7 +24,7 @@ func main() {
 
 func collect(ctx context.Context) ([]string, error) {
 	collect := &collector.Collector{}
-	if onprem {
+	if os.Getenv("ONPREM") == "true" {
 		err := collect.ConfigureOnpremDialer()
 		if err != nil {
 			log.Errorf("Setting up onprem collector: %s", err)
