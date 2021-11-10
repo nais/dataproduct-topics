@@ -1,0 +1,32 @@
+apiVersion: "nais.io/v1"
+kind: "Naisjob"
+metadata:
+  name: dataproduct-topics
+  namespace: aura
+  labels:
+    team: aura
+spec:
+  image: "{{ image }}"
+  schedule: "13 4 * * *"
+
+  {{#if kafka_pool }}
+  kafka:
+    pool: "{{ kafka_pool }}"
+  {{/if}}
+
+  {{#if kafka_brokers }}
+  env:
+    - name: ONPREM
+      value: "true"
+    - name: KAFKA_BROKERS
+      value: "{{ kafka_brokers }}"
+  {{/if}}
+
+  {{#if kafka_serviceuser_vault_path }}
+  vault:
+    enabled: true
+    paths:
+      - format: env
+        kvPath: "{{ kafka_serviceuser_vault_path }}"
+        mountPath: /var/run/secrets/nais.io/kafka_serviceuser
+  {{/if}}
