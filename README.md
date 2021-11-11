@@ -9,7 +9,7 @@ bq mk \
   --project_id aura-prod-d7e3 \
   --location europe-north1 \
   dataproduct_topics.dataproduct_topics \
-  cluster:string,topic:string,team:string
+  collection_time:datetime,pool:string,topic:string,team:string
 
 bq add-iam-policy-binding \
   --member='serviceAccount:dataproduct-topics@aura-prod-d7e3.iam.gserviceaccount.com' \

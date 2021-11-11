@@ -19,7 +19,7 @@ type Topic struct {
 	CollectionTime civil.DateTime `bigquery:"collection_time"`
 	Topic          string         `bigquery:"topic"`
 	Team           string         `bigquery:"team"`
-	Cluster        string         `bigquery:"cluster"`
+	Pool           string         `bigquery:"pool"`
 }
 
 type Collector struct {
@@ -98,19 +98,19 @@ func (c *Collector) GetTopics(ctx context.Context, brokers []string) ([]Topic, e
 		topicMap[partition.Topic] = struct{}{}
 	}
 
-	cluster := os.Getenv("CLUSTER_NAME")
+	pool := os.Getenv("POOL_NAME")
 
 	topicList := make([]Topic, len(topicMap))
 	i := 0
 	for key := range topicMap {
-		topicList[i] = createTopicFromName(key, cluster)
+		topicList[i] = createTopicFromName(key, pool)
 		i++
 	}
 
 	return topicList, nil
 }
 
-func createTopicFromName(topicName, cluster string) Topic {
+func createTopicFromName(topicName, pool string) Topic {
 	parts := strings.SplitN(topicName, ".", 2)
 
 	if len(parts) == 2 {
@@ -118,7 +118,7 @@ func createTopicFromName(topicName, cluster string) Topic {
 			CollectionTime: civil.DateTimeOf(time.Now()),
 			Topic:          parts[1],
 			Team:           parts[0],
-			Cluster:        cluster,
+			Pool:           pool,
 		}
 	}
 
@@ -126,6 +126,6 @@ func createTopicFromName(topicName, cluster string) Topic {
 		CollectionTime: civil.DateTimeOf(time.Now()),
 		Topic:          topicName,
 		Team:           "",
-		Cluster:        cluster,
+		Pool:           pool,
 	}
 }

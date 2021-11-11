@@ -18,8 +18,8 @@ spec:
   {{/if}}
 
   env:
-    - name: CLUSTER_NAME
-      value: "{{ cluster_name }}"
+    - name: POOL_NAME
+      value: "{{ pool_name }}"
     - name: GOOGLE_APPLICATION_CREDENTIALS
       value: /var/run/secrets/gcp/sa.json
   {{#if kafka_brokers }}
