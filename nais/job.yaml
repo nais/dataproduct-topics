@@ -12,17 +12,12 @@ spec:
     - secret: dataproduct-topics
       mountPath: /var/run/secrets/gcp/
 
-  {{#if kafka_pool }}
-  kafka:
-    pool: "{{ kafka_pool }}"
-  {{/if}}
-
   env:
     - name: POOL_NAME
-      value: "{{ pool_name }}"
+      value: "{{ kafka_pool }}"
     - name: GOOGLE_APPLICATION_CREDENTIALS
       value: /var/run/secrets/gcp/sa.json
-  {{#if kafka_brokers }}
+  {{#if onprem}}
     - name: ONPREM
       value: "true"
     - name: KAFKA_BROKERS
@@ -31,15 +26,18 @@ spec:
       value: "no linkerd onprem!"
 
   webproxy: true
-  {{/if}}
-
-  {{#if kafka_serviceuser_vault_path }}
   vault:
     enabled: true
     paths:
       - kvPath: "{{ kafka_serviceuser_vault_path }}"
         mountPath: /var/run/secrets/nais.io/kafka_serviceuser
   {{/if}}
+
+  {{#unless onprem}}
+  kafka:
+    pool: "{{ kafka_pool }}"
+  {{/unless}}
+
 ---
 apiVersion: v1
 kind: Secret
