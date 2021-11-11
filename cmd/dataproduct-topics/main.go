@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/nais/dataproduct-topics/pkg/collector"
 	"github.com/nais/dataproduct-topics/pkg/persister"
@@ -12,7 +13,8 @@ import (
 )
 
 func main() {
-	programContext := context.Background()
+	programContext, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+	defer cancel()
 
 	topics, err := collect(programContext)
 	if err != nil {
