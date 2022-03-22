@@ -1,7 +1,7 @@
 apiVersion: "nais.io/v1"
 kind: "Naisjob"
 metadata:
-  name: dataproduct-topics
+  name: "dataproduct-topics-{{ kafka_pool }}"
   namespace: aura
   labels:
     team: aura
