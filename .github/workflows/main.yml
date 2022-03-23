@@ -54,3 +54,18 @@ jobs:
           RESOURCE: nais/job.yaml
           VARS: nais/vars-${{ matrix.cluster }}.yaml
           VAR: image=${{ needs.build.outputs.image }},gcp_sa_json_base64=${{ secrets.GCP_SA_JSON_BASE64 }}
+  deploy-infra:
+    name: Deploy infra job
+    runs-on: ubuntu-20.04
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: "actions/checkout@v2"
+      - uses: nais/deploy/actions/deploy@v1
+        name: Deploy infra job to prod-gcp
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: nais/job.yaml
+          VARS: nais/vars-prod-gcp-infra.yaml
+          VAR: image=${{ needs.build.outputs.image }},gcp_sa_json_base64=${{ secrets.GCP_SA_JSON_BASE64 }}
