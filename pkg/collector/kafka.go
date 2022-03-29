@@ -44,6 +44,7 @@ func (c *Collector) ConfigureOnpremDialer() error {
 			RootCAs: certPool,
 		},
 	}
+	log.Info("configured on-prem dialer")
 
 	return nil
 }
@@ -67,6 +68,8 @@ func (c *Collector) ConfigureAivenDialer() error {
 			Certificates: []tls.Certificate{cert},
 		},
 	}
+	log.Info("configured Aiven dialer")
+
 	return nil
 }
 
@@ -106,6 +109,7 @@ func (c *Collector) GetTopics(ctx context.Context, brokers []string) ([]Topic, e
 		topicList[i] = createTopicFromName(key, pool)
 		i++
 	}
+	log.Infof("found %d topics in %s", len(topicList), pool)
 
 	return topicList, nil
 }
