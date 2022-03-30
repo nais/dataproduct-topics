@@ -49,3 +49,25 @@ metadata:
 type: Opaque
 data:
   sa.json: {{ gcp_sa_json_base64 }}
+
+{{#if topic}}
+---
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: "{{ topic }}"
+  namespace: aura
+  labels:
+    team: aura
+spec:
+  pool: nav-infrastructure
+  config:  # optional; all fields are optional too; defaults shown
+    cleanupPolicy: delete  # delete, compact, compact,delete
+    minimumInSyncReplicas: 1
+    partitions: 1
+    replication: 1  # see min/max requirements
+  acl:
+    - team: aura
+      application: "dataproduct-topics-{{ kafka_pool }}"
+      access: read
+{{/if}}
