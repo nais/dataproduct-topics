@@ -65,7 +65,7 @@ spec:
     cleanupPolicy: delete  # delete, compact, compact,delete
     minimumInSyncReplicas: 1
     partitions: 1
-    replication: 1  # see min/max requirements
+    replication: 2
   acl:
     - team: aura
       application: "dataproduct-topics-{{ kafka_pool }}"
