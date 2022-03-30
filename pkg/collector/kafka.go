@@ -50,9 +50,18 @@ func (c *Collector) ConfigureOnpremDialer() error {
 }
 
 func (c *Collector) ConfigureAivenDialer() error {
-	ca := os.Getenv("KAFKA_CA")
 	pool := x509.NewCertPool()
-	pool.AppendCertsFromPEM([]byte(ca))
+	ca := os.Getenv("KAFKA_CA")
+	if len(ca) > 0 {
+		pool.AppendCertsFromPEM([]byte(ca))
+	} else {
+		caPath := os.Getenv("KAFKA_CA_PATH")
+		caBytes, err := os.ReadFile(caPath)
+		if err != nil {
+			return fmt.Errorf("unable to read CA: %w", err)
+		}
+		pool.AppendCertsFromPEM(caBytes)
+	}
 
 	certFile := os.Getenv("KAFKA_CERTIFICATE_PATH")
 	keyFile := os.Getenv("KAFKA_PRIVATE_KEY_PATH")
