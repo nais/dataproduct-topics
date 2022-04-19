@@ -1,7 +1,11 @@
 apiVersion: "nais.io/v1"
 kind: "Naisjob"
 metadata:
+{{#if onprem}}
+  name: "dataproduct-topics"
+{{else}}
   name: "dataproduct-topics-{{ kafka_pool }}"
+{{/if}}
   namespace: aura
   labels:
     team: aura
