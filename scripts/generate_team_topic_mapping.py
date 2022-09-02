@@ -11,13 +11,12 @@ import tempfile
 # All third-party imports inside try-except block below
 REQUIREMENTS = [
     "requests==2.28.1",
-    "pyaml==21.10.1",
+    "pyyaml==6.0",
     "alive-progress==2.4.1",
 ]
 
 try:
     import requests
-    import pyaml
     import yaml
     from alive_progress import alive_bar
 except ImportError:
@@ -25,11 +24,25 @@ except ImportError:
     print("pip install {}".format(" ".join(REQUIREMENTS)))
     sys.exit(100)
 
-DEFAULT_OUTPUT = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "pkg/collector/team_topic.yaml"))
-VALID_CLUSTERS = ("dev-fss", "prod-fss")
+DEFAULT_OUTPUT = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "pkg/collector/team_topic_mapping.go"))
 KAFKA_ADMIN_URL = "https://kafka-adminrest.{}.nais.io"
 STREAM_TOPIC = re.compile(r".*-streams-[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}-.*")
 COMMON_NAME = re.compile(r"CN=(.*?)(,|$)")
+VALID_CLUSTERS = ("dev-fss", "prod-fss") # Update TEMPLATE below when changing this
+
+FILE_TEMPLATE = """
+package collector
+
+var teamTopicMapping = map[string]map[string]string{
+	"onprem-dev": {
+%(dev-fss)s	    
+	},
+	"onprem-prod": {
+%(prod-fss)s	    
+	},
+}
+"""
+TOPIC_TEMPLATE = '		"{topic}": "{team}",'
 
 
 def clone_vault_iac():
@@ -104,14 +117,26 @@ def generate_mapping(env, topic_mapping, service_user_mapping):
     return mapping
 
 
+def generate_go_code(mappings, output):
+    params = {}
+    for cluster, topics in mappings.items():
+        lines = []
+        for topic, team in topics.items():
+            lines.append(TOPIC_TEMPLATE.format(topic=topic, team=team))
+        params[cluster] = "\n".join(lines)
+    generated = FILE_TEMPLATE % params
+    output.write(generated)
+
+
 def main(output):
     service_user_mapping = generate_service_user_mapping()
     mappings = {}
     for env in ("dev-fss", "prod-fss"):
         topic_mapping = generate_topic_mapping(env)
         mappings[env] = generate_mapping(env, topic_mapping, service_user_mapping)
-    pyaml.dump(mappings, output)
+    generate_go_code(mappings, output)
 
 
 if __name__ == '__main__':
-    main(DEFAULT_OUTPUT)
+    with open(DEFAULT_OUTPUT, "w") as fobj:
+        main(fobj)

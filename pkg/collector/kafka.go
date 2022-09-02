@@ -135,10 +135,17 @@ func createTopicFromName(topicName, pool string) Topic {
 		}
 	}
 
+	var teamName string
+	if poolMapping, ok := teamTopicMapping[pool]; ok {
+		if team, ok := poolMapping[topicName]; ok {
+			teamName = team
+		}
+	}
+
 	return Topic{
 		CollectionTime: civil.DateTimeOf(time.Now()),
 		Topic:          topicName,
-		Team:           "",
+		Team:           teamName,
 		Pool:           pool,
 	}
 }

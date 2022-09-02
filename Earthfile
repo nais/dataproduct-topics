@@ -1,6 +1,6 @@
+VERSION 0.6
+
 ARG GO_VERSION=1.17.2
-ARG EARTHLY_GIT_PROJECT_NAME
-ARG IMAGE=ghcr.io/$EARTHLY_GIT_PROJECT_NAME
 
 FROM busybox
 LABEL org.opencontainers.image.source = "https://github.com/$EARTHLY_GIT_PROJECT_NAME"
@@ -18,6 +18,9 @@ build:
     RUN go build -o dataproduct-topics ./cmd/dataproduct-topics
 
     SAVE ARTIFACT dataproduct-topics
+
+    ARG EARTHLY_GIT_PROJECT_NAME
+    ARG IMAGE=ghcr.io/$EARTHLY_GIT_PROJECT_NAME
     SAVE IMAGE --push ${IMAGE}-cache:build
 
 tests:
@@ -34,8 +37,6 @@ linkerd-await:
 
 docker:
     FROM alpine:3.14
-    ARG EARTHLY_GIT_SHORT_HASH
-    ARG IMAGE_TAG=$EARTHLY_GIT_SHORT_HASH
 
     WORKDIR /app
 
@@ -46,5 +47,9 @@ docker:
     ENTRYPOINT [ "/app/linkerd-await", "--shutdown", "--" ]
     CMD ["/app/start.sh"]
 
+    ARG EARTHLY_GIT_SHORT_HASH
+    ARG IMAGE_TAG=$EARTHLY_GIT_SHORT_HASH
+    ARG EARTHLY_GIT_PROJECT_NAME
+    ARG IMAGE=ghcr.io/$EARTHLY_GIT_PROJECT_NAME
     SAVE IMAGE --push ${IMAGE}:${IMAGE_TAG}
     SAVE IMAGE --push ${IMAGE}:latest
