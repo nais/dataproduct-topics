@@ -125,7 +125,7 @@ def generate_go_code(mappings, output):
     params = {}
     for cluster, topics in mappings.items():
         lines = []
-        for topic, team in topics.items():
+        for topic, team in sorted(topics.items()):
             lines.append(TOPIC_TEMPLATE.format(topic=topic, team=team))
         params[cluster] = "\n".join(lines)
     generated = FILE_TEMPLATE % params
