@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -24,6 +25,15 @@ type Topic struct {
 
 type Collector struct {
 	dialer *kafka.Dialer
+}
+
+var topicFilters []*regexp.Regexp
+
+func init() {
+	topicFilters = []*regexp.Regexp{
+		regexp.MustCompile("(?i).*?KSTREAM-TOTABLE-STATE-STORE-.*-changelog$"),
+		regexp.MustCompile("(?i).*-streams-[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}-.*"),
+	}
 }
 
 func (c *Collector) ConfigureOnpremDialer() error {
@@ -115,12 +125,24 @@ func (c *Collector) GetTopics(ctx context.Context, brokers []string) ([]Topic, e
 	topicList := make([]Topic, len(topicMap))
 	i := 0
 	for key := range topicMap {
+		if ignoreTopic(key) {
+			continue
+		}
 		topicList[i] = createTopicFromName(key, pool)
 		i++
 	}
 	log.Infof("found %d topics in %s", len(topicList), pool)
 
 	return topicList, nil
+}
+
+func ignoreTopic(topicName string) bool {
+	for _, filter := range topicFilters {
+		if filter.MatchString(topicName) {
+			return true
+		}
+	}
+	return false
 }
 
 func createTopicFromName(topicName, pool string) Topic {
