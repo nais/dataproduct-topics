@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from collections import defaultdict, Counter
 
 # All third-party imports inside try-except block below
 REQUIREMENTS = [
@@ -28,9 +29,9 @@ DEFAULT_OUTPUT = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", 
 KAFKA_ADMIN_URL = "https://kafka-adminrest.{}.nais.io"
 STREAM_TOPIC = re.compile(r".*-streams-[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}-.*")
 COMMON_NAME = re.compile(r"CN=(.*?)(,|$)")
-VALID_CLUSTERS = ("dev-fss", "prod-fss") # Update TEMPLATE below when changing this
+VALID_CLUSTERS = ("dev-fss", "prod-fss")  # Update TEMPLATE below when changing this
 
-FILE_TEMPLATE = """
+FILE_TEMPLATE = """\
 package collector
 
 var teamTopicMapping = map[string]map[string]string{
@@ -41,8 +42,8 @@ var teamTopicMapping = map[string]map[string]string{
 %(prod-fss)s	    
 	},
 }
-"""
-TOPIC_TEMPLATE = '		"{topic}": "{team}",'
+"""  # NOQA
+TOPIC_TEMPLATE = '"{topic}": "{team}",'
 
 
 def clone_vault_iac():
@@ -87,20 +88,22 @@ def get_service_users(env, topic):
     resp.raise_for_status()
     data = resp.json()
     for group in data["groups"]:
-        if group["type"] != "PRODUCER":
-            continue
+        multiplier = 1
+        if group["type"] == "PRODUCER":
+            multiplier = 1000
         for member in group["members"]:
             if m := COMMON_NAME.search(member):
-                yield m.group(1)
+                yield multiplier, m.group(1)
 
 
 def generate_topic_mapping(env):
+    """Returns a map of topic -> list of service users for this env"""
     topics = get_topics(env)
     mappings = {}
     with alive_bar(len(topics), title=f"Generating topic mappings in {env} ...") as bar:
         for topic in topics:
-            service_users = get_service_users(env, topic)
-            mappings[topic] = list(service_users)
+            service_users = [t for m, t in sorted(get_service_users(env, topic), reverse=True)]
+            mappings[topic] = service_users
             bar()
     return mappings
 
@@ -113,6 +116,7 @@ def generate_mapping(env, topic_mapping, service_user_mapping):
             for user in users:
                 if team := service_user_mapping[env].get(user):
                     mapping[topic] = team
+                    break
             bar()
     return mapping
 
@@ -126,6 +130,7 @@ def generate_go_code(mappings, output):
         params[cluster] = "\n".join(lines)
     generated = FILE_TEMPLATE % params
     output.write(generated)
+    subprocess.check_call(["go", "fmt", output.name])
 
 
 def main(output):
