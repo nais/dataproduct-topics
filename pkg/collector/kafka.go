@@ -31,8 +31,15 @@ var topicFilters []*regexp.Regexp
 
 func init() {
 	topicFilters = []*regexp.Regexp{
-		regexp.MustCompile("(?i).*?KSTREAM-TOTABLE-STATE-STORE-.*-changelog$"),
+		// Kafka streams topics are linked to source/destination topics
+		regexp.MustCompile("(?i).*?KSTREAM-TOTABLE-STATE-STORE-.*-(changelog|repartition)"),
+		regexp.MustCompile("(?i).*?KSTREAM-REDUCE-STATE-STORE-.*-(changelog|repartition)"),
+		regexp.MustCompile("(?i).*?KSTREAM-AGGREGATE-STATE-STORE-.*-(changelog|repartition)"),
+		regexp.MustCompile("(?i).*?KSTREAM-JOINTHIS-.*-store-(changelog|repartition)"),
 		regexp.MustCompile("(?i).*-streams-[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}-.*"),
+		// Built-in or semi-built-in topics aren't that interesting
+		regexp.MustCompile("__.*"),
+		regexp.MustCompile("_schemas"),
 	}
 }
 
