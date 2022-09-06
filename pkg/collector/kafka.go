@@ -122,16 +122,15 @@ func (c *Collector) GetTopics(ctx context.Context, brokers []string) ([]Topic, e
 
 	pool := os.Getenv("POOL_NAME")
 
-	topicList := make([]Topic, len(topicMap))
-	i := 0
+	topicList := make([]Topic, 0, len(topicMap))
+	log.Infof("found %d topics in %s", len(topicMap), pool)
 	for key := range topicMap {
 		if ignoreTopic(key) {
 			continue
 		}
-		topicList[i] = createTopicFromName(key, pool)
-		i++
+		topicList = append(topicList, createTopicFromName(key, pool))
 	}
-	log.Infof("found %d topics in %s", len(topicList), pool)
+	log.Infof("found %d interesting topics in %s", len(topicList), pool)
 
 	return topicList, nil
 }
