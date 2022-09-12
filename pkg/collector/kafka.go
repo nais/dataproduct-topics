@@ -32,7 +32,7 @@ var topicFilters []*regexp.Regexp
 func init() {
 	topicFilters = []*regexp.Regexp{
 		// Kafka streams topics are linked to source/destination topics
-		regexp.MustCompile("(?i).*?KSTREAM-.*-store-(changelog|repartition)"),
+		regexp.MustCompile("(?i).*?-.*store.*-(changelog|repartition)"),
 		regexp.MustCompile("(?i).*?streams-[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}-.*"),
 		// Built-in or semi-built-in topics aren't that interesting
 		regexp.MustCompile("__.*"),
@@ -162,6 +162,11 @@ func createTopicFromName(topicName, pool string) Topic {
 
 	var teamName string
 	if poolMapping, ok := teamTopicMapping[pool]; ok {
+		if team, ok := poolMapping[topicName]; ok {
+			teamName = team
+		}
+	}
+	if poolMapping, ok := manualTopicMapping[pool]; ok {
 		if team, ok := poolMapping[topicName]; ok {
 			teamName = team
 		}
