@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import argparse
 import glob
 import os
 import re
@@ -7,7 +6,6 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from collections import defaultdict, Counter
 
 # All third-party imports inside try-except block below
 REQUIREMENTS = [
