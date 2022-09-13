@@ -166,10 +166,8 @@ func createTopicFromName(topicName, pool string) Topic {
 			teamName = team
 		}
 	}
-	if poolMapping, ok := manualTopicMapping[pool]; ok {
-		if team, ok := poolMapping[topicName]; ok {
-			teamName = team
-		}
+	if team, ok := manualTopicMapping[topicName]; ok {
+		teamName = team
 	}
 
 	return Topic{
