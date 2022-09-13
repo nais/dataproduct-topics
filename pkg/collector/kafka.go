@@ -34,6 +34,7 @@ func init() {
 		// Kafka streams topics are linked to source/destination topics
 		regexp.MustCompile("(?i).*?-.*store.*-(changelog|repartition)"),
 		regexp.MustCompile("(?i).*?streams-[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}-.*"),
+		regexp.MustCompile(".*ProcessingEventDtos-changelog"),
 		// Built-in or semi-built-in topics aren't that interesting
 		regexp.MustCompile("__.*"),
 		regexp.MustCompile("_schemas"),
