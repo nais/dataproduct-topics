@@ -78,4 +78,6 @@ var manualTopicMapping = map[string]string{
 	"privat-pip-pdl-person-q1":                             "pdl",
 	"privat-pip-pdl-person-q2":                             "pdl",
 	"aapen-arena-14aVedtakIverksatt-v1-q1":                 "teamarenanais",
+	"aapen-arena-dagpengeoppgaveLogget-v1-q1":              "teamarenanais",
+	"aapen-oppfolging-vedtakSendt-v1-q0":                   "pto",
 }
