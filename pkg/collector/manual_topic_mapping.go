@@ -77,4 +77,5 @@ var manualTopicMapping = map[string]string{
 	"privat-pip-pdl-person-q0":                             "pdl",
 	"privat-pip-pdl-person-q1":                             "pdl",
 	"privat-pip-pdl-person-q2":                             "pdl",
+	"aapen-arena-14aVedtakIverksatt-v1-q1":                 "teamarenanais",
 }
