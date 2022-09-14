@@ -56,4 +56,6 @@ var manualTopicMapping = map[string]string{
 	"StillingImportApiAdState":                             "teampam",
 	"StillingEkstern":                                      "teampam",
 	"Annonsehistorikk":                                     "teampam",
+	"aapen-registre-medlemskapEndret-v1-p":                 "team-rocket",
+	"public-ereg-cache-org-json":                           "arbeidsforhold",
 }
