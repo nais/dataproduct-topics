@@ -80,4 +80,11 @@ var manualTopicMapping = map[string]string{
 	"aapen-arena-14aVedtakIverksatt-v1-q1":                 "teamarenanais",
 	"aapen-arena-dagpengeoppgaveLogget-v1-q1":              "teamarenanais",
 	"aapen-oppfolging-vedtakSendt-v1-q0":                   "pto",
+	"aapen-pdl-geografisktilknytning-v1":                   "pdl",
+	"privat-pip-stream-pdl-aktorid":                        "pdl",
+	"privat-stream-pip-pdl-aktorid":                        "pdl",
+	"privat-stream-pip-pdl-fnr":                            "pdl",
+	"privat-stream-pip-pdl-gt":                             "pdl",
+	"privat-stream-pip-pdl-gt-v2":                          "pdl",
+	"privat-stream-pip-pdl-person":                         "pdl",
 }
