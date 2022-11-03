@@ -16,6 +16,7 @@ var manualTopicMapping = map[string]string{
 	"privat-sf-person-v1":                                    "crm", // Team CRM?, no nais team slug,
 	"privat-sf-person-pilot-v1":                              "crm", // Team CRM?, no nais team slug,
 	"nks-sf-pdl-v1":                                          "crm", // Team CRM?, no nais team slug,
+	"privat-person-pdl-aktor-v1":                             "pdl",
 	"privat-person-tpsHendelse-mottatt-v1":                   "pdl",
 	"privat-person-pdl-lineage-v1":                           "pdl",
 	"privat-person-pdl-identhendelseSletting-v1":             "pdl",
