@@ -53,6 +53,7 @@ var manualTopicMapping = map[string]string{
 	"aapen-arena-14aVedtakIverksatt-v1-p":                    "teamarenanais",
 	"aapen-arbeid-arbeidssoker-kontaktbruker-opprettet-q1":   "paw",
 	"aapen-arbeid-arbeidssoker-henvendelse-opprettet-p":      "paw",
+	"StillingDVH":                                            "teampam",
 	"StillingIntern":                                         "teampam",
 	"StillingImportApiAdState":                               "teampam",
 	"StillingEkstern":                                        "teampam",
