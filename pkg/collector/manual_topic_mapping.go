@@ -112,4 +112,5 @@ var manualTopicMapping = map[string]string{
 	"privat-sif-innsyn-mottak":                               "pleiepenger",
 	"aapen-sob-oppgaveHendelse-v1":                           "org",
 	"aapen-pam-samtykke-endret-v1":                           "teampam",
+	"aapen-tiltak-tilsagnsbrevGodkjent-v1":                   "teamarenanais",
 }
