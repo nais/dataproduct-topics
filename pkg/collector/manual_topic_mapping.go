@@ -111,4 +111,5 @@ var manualTopicMapping = map[string]string{
 	"privat-dagpenger-subsumsjon-brukt-data-q0":              "teamdagpenger",
 	"privat-sif-innsyn-mottak":                               "pleiepenger",
 	"aapen-sob-oppgaveHendelse-v1":                           "org",
+	"aapen-pam-samtykke-endret-v1":                           "teampam",
 }
