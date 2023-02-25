@@ -2,11 +2,14 @@ module github.com/nais/dataproduct-topics
 
 go 1.17
 
-require github.com/sirupsen/logrus v1.8.1
+require (
+	cloud.google.com/go v0.94.1
+	github.com/sirupsen/logrus v1.8.1
+)
 
 require (
 	github.com/segmentio/kafka-go v0.4.23
-	golang.org/x/sys v0.0.0-20210908233432-aa78b53d3365 // indirect
+	golang.org/x/sys v0.1.0 // indirect
 )
 
 require (
@@ -19,7 +22,6 @@ require (
 )
 
 require (
-	cloud.google.com/go v0.94.1 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.1.0 // indirect
