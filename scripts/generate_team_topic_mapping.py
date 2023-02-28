@@ -128,6 +128,7 @@ def generate_go_code(mappings, output):
         params[cluster] = "\n".join(lines)
     generated = FILE_TEMPLATE % params
     output.write(generated)
+    output.flush()
     subprocess.check_call(["go", "fmt", output.name])
 
 
