@@ -88,4 +88,8 @@ var manualTopicMapping = map[string]string{
 	"aapen-sob-oppgaveHendelse-v1":                           "org",
 	"aapen-pam-samtykke-endret-v1":                           "teampam",
 	"aapen-tiltak-tilsagnsbrevGodkjent-v1":                   "teamarenanais",
+	"arbeid-arenaCvEndret-v2-p":                              "toi",
+	"arbeid-arenaCvEndret-v2-q0":                             "toi",
+	"arbeid-arenaCvEndretRef-v1-p":                           "toi",
+	"arbeid-arenaCvEndretRef-v1-q6":                          "toi",
 }
