@@ -46,7 +46,7 @@ jobs:
         echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
         echo "image=${REGISTRY}/${IMAGE}:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}
     - name: Install earthly
-      uses: earthly/actions-setup@cce953f2ea75f5ff76f6483a788bac66a733de3a # ratchet:earthly/actions-setup@v1
+      uses: earthly/actions-setup@135d686cdc4619918fd1b542d0a08d61dd104518 # ratchet:earthly/actions-setup@v1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Install cosign
