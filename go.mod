@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	cloud.google.com/go v0.110.2
-	github.com/sirupsen/logrus v1.9.2
+	github.com/sirupsen/logrus v1.9.3
 )
 
 require (
