@@ -3,7 +3,7 @@ module github.com/nais/dataproduct-topics
 go 1.17
 
 require (
-	cloud.google.com/go v0.110.6
+	cloud.google.com/go v0.110.7
 	github.com/sirupsen/logrus v1.9.3
 )
 
