@@ -105,7 +105,7 @@ def print_user_info(user_id):
         teams_data = get_rest_data(TEAM_CATALOG_URL + "/member/membership/{}".format(user_id))
         for team in teams_data.get("teams", []):
             team_names = [team.get("name")]
-            team_names.extend(t for t in team.get("naisTeams", []))
+            team_names.extend(team.get("naisTeams", []))
             line.append(", ".join(team_names))
         print("\n\t* ".join(line))
     except requests.RequestException:
