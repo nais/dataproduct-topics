@@ -13,7 +13,7 @@ require (
 )
 
 require (
-	cloud.google.com/go/bigquery v1.54.0
+	cloud.google.com/go/bigquery v1.55.0
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/klauspost/compress v1.15.9 // indirect
