@@ -23,7 +23,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-    - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # ratchet:actions/checkout@v3
+    - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # ratchet:actions/checkout@v4
     - id: "auth"
       if: github.ref == 'refs/heads/main'
       name: "Authenticate to Google Cloud"
@@ -92,7 +92,7 @@ jobs:
           - dev-gcp
           - prod-gcp
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: "actions/checkout@v4"
       - uses: nais/deploy/actions/deploy@v1
         name: Deploy to ${{ matrix.cluster }}
         env:
@@ -107,7 +107,7 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: "actions/checkout@v4"
       - uses: nais/deploy/actions/deploy@v1
         name: Deploy infra job to prod-gcp
         env:
