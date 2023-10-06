@@ -1,11 +1,7 @@
 apiVersion: "nais.io/v1"
 kind: "Naisjob"
 metadata:
-{{#if onprem}}
-  name: "dataproduct-topics"
-{{else}}
   name: "dataproduct-topics-{{ kafka_pool }}"
-{{/if}}
   namespace: aura
   labels:
     team: aura
@@ -21,26 +17,9 @@ spec:
       value: "{{ kafka_pool }}"
     - name: GOOGLE_APPLICATION_CREDENTIALS
       value: /var/run/secrets/gcp/sa.json
-  {{#if onprem}}
-    - name: ONPREM
-      value: "true"
-    - name: KAFKA_BROKERS
-      value: "{{ kafka_brokers }}"
-    - name: LINKERD_AWAIT_DISABLED
-      value: "no linkerd onprem!"
 
-  webproxy: true
-  vault:
-    enabled: true
-    paths:
-      - kvPath: "{{ kafka_serviceuser_vault_path }}"
-        mountPath: /var/run/secrets/nais.io/kafka_serviceuser
-  {{/if}}
-
-  {{#unless onprem}}
   kafka:
     pool: "{{ kafka_pool }}"
-  {{/unless}}
 
 ---
 apiVersion: v1
@@ -52,7 +31,7 @@ metadata:
   namespace: aura
 type: Opaque
 data:
-  sa.json: {{ gcp_sa_json_base64 }}
+  sa.json: "{{ gcp_sa_json_base64 }}"
 
 {{#if topic}}
 ---

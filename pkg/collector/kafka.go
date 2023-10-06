@@ -12,7 +12,6 @@ import (
 
 	"cloud.google.com/go/civil"
 	"github.com/segmentio/kafka-go"
-	"github.com/segmentio/kafka-go/sasl/plain"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -39,29 +38,6 @@ func init() {
 		regexp.MustCompile("__.*"),
 		regexp.MustCompile("_schemas"),
 	}
-}
-
-func (c *Collector) ConfigureOnpremDialer() error {
-	mechanism := plain.Mechanism{
-		Username: os.Getenv("KAFKA_USERNAME"),
-		Password: os.Getenv("KAFKA_PASSWORD"),
-	}
-
-	certPool, err := x509.SystemCertPool()
-	if err != nil {
-		return fmt.Errorf("load system cert pool: %s", err)
-	}
-
-	c.dialer = &kafka.Dialer{
-		DualStack:     false,
-		SASLMechanism: mechanism,
-		TLS: &tls.Config{
-			RootCAs: certPool,
-		},
-	}
-	log.Info("configured on-prem dialer")
-
-	return nil
 }
 
 func (c *Collector) ConfigureAivenDialer() error {
@@ -133,7 +109,12 @@ func (c *Collector) GetTopics(ctx context.Context, brokers []string) ([]Topic, e
 		if ignoreTopic(key) {
 			continue
 		}
-		topicList = append(topicList, createTopicFromName(key, pool))
+		topic, err := createTopicFromName(key, pool)
+		if err != nil {
+			log.Warn(err)
+			continue
+		}
+		topicList = append(topicList, topic)
 	}
 	log.Infof("found %d interesting topics in %s", len(topicList), pool)
 
@@ -149,7 +130,7 @@ func ignoreTopic(topicName string) bool {
 	return false
 }
 
-func createTopicFromName(topicName, pool string) Topic {
+func createTopicFromName(topicName, pool string) (Topic, error) {
 	parts := strings.SplitN(topicName, ".", 2)
 
 	if len(parts) == 2 {
@@ -158,23 +139,8 @@ func createTopicFromName(topicName, pool string) Topic {
 			Topic:          parts[1],
 			Team:           parts[0],
 			Pool:           pool,
-		}
+		}, nil
 	}
 
-	var teamName string
-	if poolMapping, ok := teamTopicMapping[pool]; ok {
-		if team, ok := poolMapping[topicName]; ok {
-			teamName = team
-		}
-	}
-	if team, ok := manualTopicMapping[topicName]; ok {
-		teamName = team
-	}
-
-	return Topic{
-		CollectionTime: civil.DateTimeOf(time.Now()),
-		Topic:          topicName,
-		Team:           teamName,
-		Pool:           pool,
-	}
+	return Topic{}, fmt.Errorf("unable to parse topic name: %s", topicName)
 }

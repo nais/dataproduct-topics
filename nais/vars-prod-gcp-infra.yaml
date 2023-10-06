@@ -1,3 +1,2 @@
 kafka_pool: nav-infrastructure
-onprem: false
 topic: dataproduct-topics-dummy

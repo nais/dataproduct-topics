@@ -33,16 +33,9 @@ func main() {
 
 func collect(ctx context.Context) ([]collector.Topic, error) {
 	collect := &collector.Collector{}
-	if os.Getenv("ONPREM") == "true" {
-		err := collect.ConfigureOnpremDialer()
-		if err != nil {
-			return nil, fmt.Errorf("configure onprem collector: %s", err)
-		}
-	} else {
-		err := collect.ConfigureAivenDialer()
-		if err != nil {
-			return nil, fmt.Errorf("configure aiven collector: %s", err)
-		}
+	err := collect.ConfigureAivenDialer()
+	if err != nil {
+		return nil, fmt.Errorf("configure aiven collector: %s", err)
 	}
 
 	brokersEnv := os.Getenv("KAFKA_BROKERS")

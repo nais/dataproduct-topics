@@ -90,9 +90,7 @@ jobs:
       matrix:
         cluster:
           - dev-gcp
-          - dev-fss
           - prod-gcp
-          - prod-fss
     steps:
       - uses: "actions/checkout@v3"
       - uses: nais/deploy/actions/deploy@v1
