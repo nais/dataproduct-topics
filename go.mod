@@ -8,7 +8,7 @@ require (
 )
 
 require (
-	github.com/segmentio/kafka-go v0.4.45
+	github.com/segmentio/kafka-go v0.4.46
 	golang.org/x/sys v0.13.0 // indirect
 )
 
