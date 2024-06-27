@@ -1,12 +1,12 @@
 VERSION 0.6
 
-ARG GO_VERSION=1.17.2
+ARG GO_VERSION=1.22.4
 
 FROM busybox
 LABEL org.opencontainers.image.source = "https://github.com/$EARTHLY_GIT_PROJECT_NAME"
 
 build:
-    FROM golang:${GO_VERSION}-alpine3.14
+    FROM golang:${GO_VERSION}-alpine3.20
     ENV CGO_ENABLED=0
 
     WORKDIR /app
@@ -36,7 +36,7 @@ linkerd-await:
     SAVE ARTIFACT linkerd-await
 
 docker:
-    FROM alpine:3.14
+    FROM alpine:3.20
 
     WORKDIR /app
 
