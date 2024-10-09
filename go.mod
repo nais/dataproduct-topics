@@ -5,7 +5,7 @@ go 1.22
 toolchain go1.22.4
 
 require (
-	cloud.google.com/go v0.115.1
+	cloud.google.com/go v0.116.0
 	github.com/sirupsen/logrus v1.9.3
 )
 
