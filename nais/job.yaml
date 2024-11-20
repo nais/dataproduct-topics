@@ -2,9 +2,9 @@ apiVersion: "nais.io/v1"
 kind: "Naisjob"
 metadata:
   name: "dataproduct-topics-{{ kafka_pool }}"
-  namespace: aura
+  namespace: nais
   labels:
-    team: aura
+    team: nais
 spec:
   image: "{{ image }}"
   schedule: "13 4 * * *"
@@ -28,7 +28,7 @@ metadata:
   labels:
     app: dataproduct-topics
   name: dataproduct-topics
-  namespace: aura
+  namespace: nais
 type: Opaque
 data:
   sa.json: "{{ gcp_sa_json_base64 }}"
@@ -39,9 +39,9 @@ apiVersion: kafka.nais.io/v1
 kind: Topic
 metadata:
   name: "{{ topic }}"
-  namespace: aura
+  namespace: nais
   labels:
-    team: aura
+    team: nais
 spec:
   pool: nav-infrastructure
   config:  # optional; all fields are optional too; defaults shown
@@ -50,7 +50,7 @@ spec:
     partitions: 1
     replication: 2
   acl:
-    - team: aura
+    - team: nais
       application: "dataproduct-topics-{{ kafka_pool }}"
       access: read
 {{/if}}

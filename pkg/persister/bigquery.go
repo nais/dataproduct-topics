@@ -7,7 +7,7 @@ import (
 	"github.com/nais/dataproduct-topics/pkg/collector"
 )
 
-const BigQueryProjectID = "aura-prod-d7e3"
+const BigQueryProjectID = "nais-prod-b6f2"
 
 func Persist(ctx context.Context, topics []collector.Topic) error {
 	client, err := bigquery.NewClient(ctx, BigQueryProjectID)

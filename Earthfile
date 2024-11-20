@@ -1,6 +1,6 @@
 VERSION 0.6
 
-ARG GO_VERSION=1.22.4
+ARG GO_VERSION=1.23.3
 
 FROM busybox
 LABEL org.opencontainers.image.source = "https://github.com/$EARTHLY_GIT_PROJECT_NAME"
