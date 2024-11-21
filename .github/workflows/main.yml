@@ -96,7 +96,6 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         name: Deploy to ${{ matrix.cluster }}
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: ${{ matrix.cluster }}
           RESOURCE: nais/job.yaml
           VARS: nais/vars-${{ matrix.cluster }}.yaml
@@ -111,7 +110,6 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         name: Deploy infra job to prod-gcp
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: nais/job.yaml
           VARS: nais/vars-prod-gcp-infra.yaml
