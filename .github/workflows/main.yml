@@ -83,8 +83,6 @@ jobs:
     outputs:
       image: "${{ steps.set-image-tag.outputs.image }}"
   deploy:
-    permissions:
-      id-token: read
     name: Deploy
     runs-on: ubuntu-20.04
     needs: build
@@ -104,8 +102,6 @@ jobs:
           VARS: nais/vars-${{ matrix.cluster }}.yaml
           VAR: image=${{ needs.build.outputs.image }},gcp_sa_json_base64=${{ secrets.GCP_SA_JSON_BASE64 }}
   deploy-infra:
-    permissions:
-      id-token: read
     name: Deploy infra job
     runs-on: ubuntu-20.04
     needs: build
